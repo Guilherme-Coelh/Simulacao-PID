@@ -1,0 +1,47 @@
+name: Gerar Executaveis
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-24.04]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Baixar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Instalar bibliotecas
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pygame-ce pyinstaller
+
+      - name: Compilar programa
+        run: |
+          python -m PyInstaller --onefile --windowed --name ControlePID simulacao_controle.py
+
+      - name: Salvar executavel Windows
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ControlePID-Windows
+          path: dist/ControlePID.exe
+
+      - name: Salvar executavel Linux
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ControlePID-Linux
+          path: dist/ControlePID

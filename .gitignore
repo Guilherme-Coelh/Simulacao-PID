@@ -1,0 +1,16 @@
+# Ambientes virtuais
+testePID/
+.venv/
+venv/
+
+# Arquivos temporários
+__pycache__/
+*.pyc
+
+# Arquivos de compilação
+build/
+dist/
+*.spec
+
+# Configurações locais
+.vscode/
